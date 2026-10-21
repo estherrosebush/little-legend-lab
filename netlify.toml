@@ -1,0 +1,7 @@
+[dev]
+  targetPort = 3000
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
