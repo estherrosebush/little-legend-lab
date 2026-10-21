@@ -68,6 +68,48 @@ export const researchProjects = pgTable("research_projects", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
+export const classrooms = pgTable("classrooms", {
+  id: serial().primaryKey(),
+  name: text().notNull(),
+  emoji: text().default("📘").notNull(),
+  color: text().default("#b98cff").notNull(),
+  description: text().default(""),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export const classroomLinks = pgTable("classroom_links", {
+  id: serial().primaryKey(),
+  classroomId: integer("classroom_id")
+    .notNull()
+    .references(() => classrooms.id, { onDelete: "cascade" }),
+  label: text().notNull(),
+  url: text().notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export const classroomActivities = pgTable("classroom_activities", {
+  id: serial().primaryKey(),
+  classroomId: integer("classroom_id")
+    .notNull()
+    .references(() => classrooms.id, { onDelete: "cascade" }),
+  title: text().notNull(),
+  status: text().default("todo").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export const calendarItems = pgTable("calendar_items", {
+  id: serial().primaryKey(),
+  title: text().notNull(),
+  kind: text().default("event").notNull(),
+  date: text("date").notNull(),
+  time: text().default(""),
+  classroomId: integer("classroom_id").references(() => classrooms.id, {
+    onDelete: "set null",
+  }),
+  done: text().default("no").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
 export const snapshots = pgTable("snapshots", {
   id: serial().primaryKey(),
   label: text().default(""),
