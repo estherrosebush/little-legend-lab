@@ -3,90 +3,91 @@ import { NavLink, Route, Routes } from 'react-router-dom';
 
 const DEFAULT_FOOD_FACTS = {
   oats: {
-    fact: 'Oats are slow-burning fuel that can help steady your energy so your brain and body don’t crash too fast.',
-    body: 'Good for calm, steady focus and long-lasting energy.',
+    fact: 'Oats are a slow-release carb, so they fuel you steadily through long school days and practices without the crash.',
+    body: 'Great for steady focus and long-lasting energy.',
     color: '#f7c873'
   },
   berries: {
-    fact: 'Berries are packed with colorful antioxidants that help protect your body and support brain health.',
-    body: 'Helpful for brain support and glowing energy.',
+    fact: 'Berries are loaded with antioxidants and vitamin C, which support your brain and immune system.',
+    body: 'Helpful for brain power and glowing energy.',
     color: '#ff7ca8'
   },
   eggs: {
-    fact: 'Eggs give your body protein, which helps build and repair muscles and supports brain function.',
-    body: 'Great for staying full and helping your brain work well.',
+    fact: 'Eggs pack complete protein plus choline, a nutrient your brain uses to build memory and focus.',
+    body: 'Great for staying full and thinking clearly.',
     color: '#f9e7a3'
   },
   yogurt: {
-    fact: 'Yogurt can support your gut, help you feel full, and gives a gentle protein boost.',
-    body: 'Good for tummy comfort and steady energy.',
+    fact: 'Yogurt delivers protein, calcium, and probiotics — good for bones, muscles, and your gut.',
+    body: 'Good for strong bones and steady energy.',
     color: '#d7f1ff'
   },
   spinach: {
-    fact: 'Spinach gives you iron and vitamins that help carry oxygen through your body and support focus.',
-    body: 'Helps the body feel strong and ready for movement.',
+    fact: 'Spinach brings iron and folate, which help your blood carry oxygen to your muscles and brain.',
+    body: 'Helps you feel strong and ready for anything.',
     color: '#7ddf8b'
   },
   banana: {
-    fact: 'Bananas are quick fuel for the body and can help your muscles and brain feel ready for activity.',
-    body: 'Helpful before a walk, workout, or study session.',
+    fact: 'Bananas are quick carbs plus potassium, which helps your muscles fire during sports and workouts.',
+    body: 'Smart fuel before practice, a walk, or a study session.',
     color: '#f4d35e'
   },
   nuts: {
-    fact: 'Nuts are a crunchy source of healthy fats and protein that can keep you going between meals.',
-    body: 'Helpful for steady energy and fullness.',
+    fact: 'Nuts combine healthy fats, protein, and fiber to keep you full and focused between meals.',
+    body: 'Great for lasting energy between classes.',
     color: '#d59a60'
   },
   fruit: {
-    fact: 'Fruit gives your body vitamins, hydration, and quick energy that can help lift your mood.',
-    body: 'A bright, refreshing way to support your body.',
+    fact: 'Fruit gives you fast carbs, water, and vitamins — a smart pick-me-up before or after activity.',
+    body: 'A fresh way to recharge your body.',
     color: '#ff9a62'
   },
   rice: {
-    fact: 'Rice gives your body easy energy that can help you feel ready to learn, move, and explore.',
+    fact: 'Rice is easy-to-digest fuel that tops off your energy stores before practice or a busy day.',
     body: 'Good fuel for active days.',
     color: '#fbe7a6'
   },
   pasta: {
-    fact: 'Pasta can provide energy and help you feel stronger for a busy day of learning and play.',
+    fact: 'Pasta is a carb-loading classic; pair it with protein and veggies for energy that lasts.',
     body: 'Best with protein and veggies for balance.',
     color: '#f3d69a'
   },
   vegetables: {
-    fact: 'Vegetables help your body grow, heal, and stay strong with fiber, vitamins, and minerals.',
-    body: 'Colorful veggies help your body and brain feel their best.',
+    fact: 'Vegetables bring fiber, vitamins, and minerals that help you grow stronger and recover faster.',
+    body: 'Colorful veggies help your body and brain perform their best.',
     color: '#7fd77b'
   },
   water: {
-    fact: 'Water helps your brain think clearly and helps your body move and digest food well.',
-    body: 'A must-have for focus, energy, and feeling good.',
+    fact: 'Even mild dehydration measurably drops focus and energy — water keeps your brain and muscles online.',
+    body: 'Non-negotiable for focus, energy, and feeling good.',
     color: '#7cc6ff'
   },
   sugar: {
-    fact: 'Foods with lots of added sugar can give a quick boost, but they can also leave your energy feeling wobbly later.',
-    body: 'Best in small amounts, paired with something nourishing.',
+    fact: 'Added sugar spikes your energy fast, then drops it hard — fine sometimes, best paired with protein or fiber.',
+    body: 'Best in small amounts, balanced with something nourishing.',
     color: '#ff8db1'
   },
   snack: {
-    fact: 'Healthy snacks can help your body and brain stay balanced when you need a little support.',
-    body: 'A smart snack can help you feel steady and ready.',
+    fact: 'A smart snack pairs carbs with protein or fat to keep your energy and mood even.',
+    body: 'A smart snack keeps you steady and ready.',
     color: '#ffd166'
   }
 };
 
 const DEFAULT_CHORES = [
-  { id: 1, title: 'Make bed', category: 'Morning', reward: 1, done: false },
-  { id: 2, title: 'Brush teeth and hair', category: 'Morning', reward: 1, done: false },
-  { id: 3, title: 'Feed pet', category: 'Daily', reward: 1, done: false },
-  { id: 4, title: 'Put laundry away', category: 'Home', reward: 2, done: false },
-  { id: 5, title: 'Water plants', category: 'Home', reward: 1, done: false },
-  { id: 6, title: 'Read for 20 minutes', category: 'Learning', reward: 2, done: false }
+  { id: 1, title: 'Tidy bedroom', category: 'Morning', reward: 1, done: false },
+  { id: 2, title: 'Get ready without reminders', category: 'Morning', reward: 1, done: false },
+  { id: 3, title: 'Homework block', category: 'School', reward: 2, done: false },
+  { id: 4, title: 'Practice instrument — 20 minutes', category: 'Creative', reward: 2, done: false },
+  { id: 5, title: 'Load or empty the dishwasher', category: 'Home', reward: 1, done: false },
+  { id: 6, title: 'Walk the dog', category: 'Home', reward: 1, done: false },
+  { id: 7, title: 'Read for 30 minutes', category: 'School', reward: 2, done: false }
 ];
 
 const DEFAULT_STICKERS = [
-  { id: 1, label: 'Focus Star', value: 1, color: '#f7d154', count: 3 },
-  { id: 2, label: 'Kindness Star', value: 1, color: '#86d6ff', count: 2 },
-  { id: 3, label: 'Creative Spark', value: 1, color: '#ff9ecb', count: 4 }
+  { id: 1, label: 'Focus Badge', value: 1, color: '#f7d154', count: 3 },
+  { id: 2, label: 'Kindness Badge', value: 1, color: '#86d6ff', count: 2 },
+  { id: 3, label: 'Creator Badge', value: 1, color: '#ff9ecb', count: 4 }
 ];
 
 const DEFAULT_MEALS = [
@@ -94,10 +95,10 @@ const DEFAULT_MEALS = [
     id: 1,
     type: 'breakfast',
     name: 'Blueberry oatmeal',
-    note: 'Warm, cozy, and full of slow energy.',
+    note: 'Kept me full through the whole morning.',
     energy: 'steady',
     mood: 'happy',
-    bodyFeel: 'felt calm and full',
+    bodyFeel: 'calm and full',
     timestamp: new Date().toISOString()
   },
   {
@@ -107,16 +108,42 @@ const DEFAULT_MEALS = [
     note: 'Crunchy and satisfying.',
     energy: 'good',
     mood: 'focused',
-    bodyFeel: 'not too sleepy',
+    bodyFeel: 'no afternoon slump',
     timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString()
   }
 ];
 
-const SPORT_QUESTIONS = [
-  'Which body signal tells you it is time to take a water break?',
-  'What helps your body feel stronger before a game?',
-  'When you feel tired, what is a smart move?',
-  'What should you do after a burst of active play?' 
+const QUIZ_QUESTIONS = [
+  {
+    question: 'You have a big test tomorrow. What helps your brain the most tonight?',
+    options: ['A full night of sleep', 'Extra late-night screen time', 'Skimming notes while snacking'],
+    correct: 0,
+    why: 'Sleep is when your brain files away what you learned — it is the ultimate study hack.'
+  },
+  {
+    question: 'Halfway through soccer practice, what does your body need most?',
+    options: ['Sugary soda', 'Water and a quick breather', 'Push harder, no stopping'],
+    correct: 1,
+    why: 'Hydration plus short breaks keeps your muscles and focus sharp for the whole session.'
+  },
+  {
+    question: 'You have been doing homework for 45 minutes. The smartest next move?',
+    options: ['Power through for 2 more hours', 'Take a 5-minute movement break', 'Switch to social media'],
+    correct: 1,
+    why: 'Short movement breaks reset your attention so the next block of work goes faster.'
+  },
+  {
+    question: 'The smartest way to warm up before a game or workout is…',
+    options: ['Sprint at full speed right away', 'Skip the warm-up', 'Light movement, then dynamic stretches'],
+    correct: 2,
+    why: 'Warming up raises your heart rate gradually and protects your muscles from strains.'
+  },
+  {
+    question: 'Your legs are sore two days after practice. That is mostly…',
+    options: ['A sign you should never train again', 'Normal muscle recovery and repair', 'Proof you need extra sugar'],
+    correct: 1,
+    why: 'Next-day soreness is your muscles rebuilding stronger — rest, water, and gentle movement help.'
+  }
 ];
 
 const ADMIN_USERNAME = 'parent';
@@ -143,15 +170,15 @@ function getFoodFact(name) {
   if (query.includes('milk') || query.includes('cheese') || query.includes('protein')) {
     return {
       name: 'protein',
-      fact: 'Protein helps build strong muscles and keeps hunger from sneaking up too early.',
-      body: 'Helpful for a steady, strong day.',
+      fact: 'Protein builds and repairs muscle and keeps hunger from sneaking up early — great after sports.',
+      body: 'Helpful for a strong, steady day.',
       color: '#c4e4ff'
     };
   }
 
   return {
     name: 'whole foods',
-    fact: 'Whole foods give your body the fuel it needs to think clearly, move, and grow.',
+    fact: 'Whole foods give your body the nutrients it needs to think, move, and recover. Colorful, balanced plates usually win.',
     body: 'Colorful, balanced foods usually help us feel our best.',
     color: '#a7e6a7'
   };
@@ -162,10 +189,10 @@ function formatTime(value) {
 }
 
 function App() {
-  const [meals, setMeals] = useState(() => loadStored('littleLegendMeals', DEFAULT_MEALS));
-  const [chores, setChores] = useState(() => loadStored('littleLegendChores', DEFAULT_CHORES));
-  const [stickers, setStickers] = useState(() => loadStored('littleLegendStickers', DEFAULT_STICKERS));
-  const [adminLoggedIn, setAdminLoggedIn] = useState(() => loadStored('littleLegendAdminLoggedIn', false));
+  const [meals, setMeals] = useState(() => loadStored('legendLabMeals', DEFAULT_MEALS));
+  const [chores, setChores] = useState(() => loadStored('legendLabChores', DEFAULT_CHORES));
+  const [stickers, setStickers] = useState(() => loadStored('legendLabStickers', DEFAULT_STICKERS));
+  const [adminLoggedIn, setAdminLoggedIn] = useState(() => loadStored('legendLabAdminLoggedIn', false));
   const [adminLogin, setAdminLogin] = useState({ username: '', password: '' });
   const [newMeal, setNewMeal] = useState({
     name: '',
@@ -176,24 +203,24 @@ function App() {
     bodyFeel: ''
   });
   const [newChore, setNewChore] = useState({ title: '', category: 'Home', reward: 1 });
-  const [newSticker, setNewSticker] = useState({ label: 'Spark Star', value: 1, color: '#ffd166' });
-  const [sportQuestionIndex, setSportQuestionIndex] = useState(0);
-  const [sportFeedback, setSportFeedback] = useState('');
+  const [newSticker, setNewSticker] = useState({ label: 'Creator Badge', value: 1, color: '#ffd166' });
+  const [quizQuestionIndex, setQuizQuestionIndex] = useState(0);
+  const [quizFeedback, setQuizFeedback] = useState('');
 
   useEffect(() => {
-    window.localStorage.setItem('littleLegendMeals', JSON.stringify(meals));
+    window.localStorage.setItem('legendLabMeals', JSON.stringify(meals));
   }, [meals]);
 
   useEffect(() => {
-    window.localStorage.setItem('littleLegendChores', JSON.stringify(chores));
+    window.localStorage.setItem('legendLabChores', JSON.stringify(chores));
   }, [chores]);
 
   useEffect(() => {
-    window.localStorage.setItem('littleLegendStickers', JSON.stringify(stickers));
+    window.localStorage.setItem('legendLabStickers', JSON.stringify(stickers));
   }, [stickers]);
 
   useEffect(() => {
-    window.localStorage.setItem('littleLegendAdminLoggedIn', JSON.stringify(adminLoggedIn));
+    window.localStorage.setItem('legendLabAdminLoggedIn', JSON.stringify(adminLoggedIn));
   }, [adminLoggedIn]);
 
   const totalStickerCount = useMemo(
@@ -275,7 +302,7 @@ function App() {
       return [...current, sticker];
     });
 
-    setNewSticker({ label: 'Spark Star', value: 1, color: '#ffd166' });
+    setNewSticker({ label: 'Creator Badge', value: 1, color: '#ffd166' });
   };
 
   const handleAdminLogin = (event) => {
@@ -289,37 +316,40 @@ function App() {
       return;
     }
 
-    alert('That login did not match. Try parent / foreststar');
+    alert('That login did not match. Ask a parent to try again.');
   };
 
-  const handleSportAnswer = (option) => {
-    const isCorrect = option === 'water' || option === 'movement' || option === 'rest';
-    setSportFeedback(
-      isCorrect
-        ? 'Great choice! Taking care of your body helps you learn and play better.'
-        : 'Good try. The best move is often water, rest, or gentle movement when your body needs it.'
-    );
-    setSportQuestionIndex((current) => (current + 1) % SPORT_QUESTIONS.length);
+  const handleQuizAnswer = (optionIndex) => {
+    if (quizFeedback) return;
+
+    const question = QUIZ_QUESTIONS[quizQuestionIndex];
+    const isCorrect = optionIndex === question.correct;
+    setQuizFeedback(isCorrect ? `Correct! ${question.why}` : `Not quite — ${question.why}`);
+
+    window.setTimeout(() => {
+      setQuizFeedback('');
+      setQuizQuestionIndex((current) => (current + 1) % QUIZ_QUESTIONS.length);
+    }, 2800);
   };
 
   return (
     <div className="app-shell">
       <header className="topbar">
         <div className="brand-block">
-          <span className="brand-mark">✦</span>
+          <span className="brand-mark">⚡</span>
           <div>
-            <h1>Little Legend Lab</h1>
-            <p>creative learning, cozy habits, and brave discovery</p>
+            <h1>Legend Lab</h1>
+            <p>plan it, track it, level up</p>
           </div>
         </div>
 
         <nav className="nav-links" aria-label="Main navigation">
           <NavLink to="/">Home</NavLink>
-          <NavLink to="/nutrition">Food & Mood</NavLink>
-          <NavLink to="/research">Research Lab</NavLink>
-          <NavLink to="/book">Yearbook</NavLink>
-          <NavLink to="/chores">Chores</NavLink>
-          <NavLink to="/admin">Admin</NavLink>
+          <NavLink to="/nutrition">Food &amp; Mood</NavLink>
+          <NavLink to="/research">Curiosity Lab</NavLink>
+          <NavLink to="/book">Story Studio</NavLink>
+          <NavLink to="/chores">Quests</NavLink>
+          <NavLink to="/admin">Parent Zone</NavLink>
         </nav>
       </header>
 
@@ -334,9 +364,9 @@ function App() {
                 stickers={stickers}
                 totalStickerCount={totalStickerCount}
                 completedChores={completedChores}
-                sportQuestionIndex={sportQuestionIndex}
-                sportFeedback={sportFeedback}
-                handleSportAnswer={handleSportAnswer}
+                quizQuestionIndex={quizQuestionIndex}
+                quizFeedback={quizFeedback}
+                handleQuizAnswer={handleQuizAnswer}
               />
             }
           />
@@ -351,16 +381,16 @@ function App() {
               />
             }
           />
-          <Route path="/research" element={<ResearchLab />} />
-          <Route path="/book" element={<BookBuilder />} />
+          <Route path="/research" element={<CuriosityLab />} />
+          <Route path="/book" element={<StoryStudio />} />
           <Route
             path="/chores"
-            element={<ChorePage chores={chores} handleChoreToggle={handleChoreToggle} />}
+            element={<QuestPage chores={chores} handleChoreToggle={handleChoreToggle} />}
           />
           <Route
             path="/admin"
             element={
-              <AdminPage
+              <ParentZonePage
                 adminLoggedIn={adminLoggedIn}
                 adminLogin={adminLogin}
                 setAdminLogin={setAdminLogin}
@@ -385,21 +415,22 @@ function App() {
   );
 }
 
-function Dashboard({ meals, chores, stickers, totalStickerCount, completedChores, sportQuestionIndex, sportFeedback, handleSportAnswer }) {
+function Dashboard({ meals, chores, stickers, totalStickerCount, completedChores, quizQuestionIndex, quizFeedback, handleQuizAnswer }) {
   const lastMeal = meals[0];
   const dailyFocus = chores.filter((chore) => !chore.done).slice(0, 3);
+  const quizQuestion = QUIZ_QUESTIONS[quizQuestionIndex];
 
   return (
     <div className="dashboard-grid">
       <section className="panel hero-panel">
         <div>
-          <p className="eyebrow">Today’s quest</p>
-          <h2>Make a brave, beautiful day.</h2>
+          <p className="eyebrow">Today’s game plan</p>
+          <h2>Own your day.</h2>
         </div>
         <div className="hero-badges">
-          <span>🌞 Morning rhythm</span>
-          <span>🍎 Food awareness</span>
-          <span>🎨 Creative writing</span>
+          <span>🌅 Morning routine</span>
+          <span>🥗 Fuel &amp; focus</span>
+          <span>🎨 Creative time</span>
         </div>
       </section>
 
@@ -411,9 +442,9 @@ function Dashboard({ meals, chores, stickers, totalStickerCount, completedChores
       <section className="panel color-card blue">
         <p className="eyebrow">Self care</p>
         <ul className="mini-list">
-          <li>Drink water</li>
-          <li>Stretch for 2 minutes</li>
-          <li>Take a quiet reset</li>
+          <li>Refill your water bottle</li>
+          <li>10-minute stretch or dance break</li>
+          <li>Screen-free reset: journal, draw, or music</li>
         </ul>
       </section>
 
@@ -425,14 +456,14 @@ function Dashboard({ meals, chores, stickers, totalStickerCount, completedChores
             <p>{getFoodFact(lastMeal.name).fact}</p>
           </div>
         ) : (
-          <p>Log a snack or meal to see your nutrition card.</p>
+          <p>Log a snack or meal to see what it is doing for you.</p>
         )}
       </section>
 
       <section className="panel color-card green">
-        <p className="eyebrow">Sticker chart</p>
+        <p className="eyebrow">XP tracker</p>
         <div className="big-stat">{totalStickerCount}</div>
-        <p>stars earned this week</p>
+        <p>XP earned so far</p>
         <div className="sticker-row">
           {stickers.map((sticker) => (
             <span key={sticker.id} className="sticker-dot" style={{ background: sticker.color }} title={sticker.label}>
@@ -443,7 +474,7 @@ function Dashboard({ meals, chores, stickers, totalStickerCount, completedChores
       </section>
 
       <section className="panel color-card yellow">
-        <p className="eyebrow">Daily mission</p>
+        <p className="eyebrow">Today’s quests</p>
         {dailyFocus.length ? (
           <ul className="mini-list">
             {dailyFocus.map((chore) => (
@@ -451,20 +482,20 @@ function Dashboard({ meals, chores, stickers, totalStickerCount, completedChores
             ))}
           </ul>
         ) : (
-          <p>Everything is complete! You did a great job.</p>
+          <p>All quests complete. Level cleared!</p>
         )}
-        <small>{completedChores} of {chores.length} chores done</small>
+        <small>{completedChores} of {chores.length} quests done</small>
       </section>
 
       <section className="panel movement-panel">
-        <p className="eyebrow">Move & answer</p>
-        <h3>{SPORT_QUESTIONS[sportQuestionIndex]}</h3>
+        <p className="eyebrow">Brain &amp; body check</p>
+        <h3>{quizQuestion.question}</h3>
         <div className="movement-options">
-          <button onClick={() => handleSportAnswer('water')}>Water</button>
-          <button onClick={() => handleSportAnswer('movement')}>Movement</button>
-          <button onClick={() => handleSportAnswer('rest')}>Rest</button>
+          {quizQuestion.options.map((option, index) => (
+            <button key={option} onClick={() => handleQuizAnswer(index)}>{option}</button>
+          ))}
         </div>
-        {sportFeedback && <p className="feedback-note">{sportFeedback}</p>}
+        {quizFeedback && <p className="feedback-note">{quizFeedback}</p>}
       </section>
     </div>
   );
@@ -506,7 +537,7 @@ function PomodoroTimer() {
 
   return (
     <div className="timer-box">
-      <span className="timer-mode">{mode === 'work' ? 'Focus sprint' : 'Reset break'}</span>
+      <span className="timer-mode">{mode === 'work' ? 'Focus session' : 'Brain break'}</span>
       <div className="timer-clock">
         {minutes}:{seconds}
       </div>
@@ -522,8 +553,8 @@ function NutritionPage({ meals, newMeal, setNewMeal, handleMealSubmit }) {
   return (
     <div className="content-grid">
       <section className="panel">
-        <p className="eyebrow">Nutrition log</p>
-        <h2>What did your body eat today?</h2>
+        <p className="eyebrow">Food log</p>
+        <h2>What did you eat today?</h2>
 
         <form className="form-stack" onSubmit={handleMealSubmit}>
           <label>
@@ -557,9 +588,9 @@ function NutritionPage({ meals, newMeal, setNewMeal, handleMealSubmit }) {
                 onChange={(event) => setNewMeal({ ...newMeal, energy: event.target.value })}
               >
                 <option value="steady">Steady</option>
-                <option value="good">Good</option>
-                <option value="sleepy">Sleepy</option>
-                <option value="wobbly">Wobbly</option>
+                <option value="energized">Energized</option>
+                <option value="sluggish">Sluggish</option>
+                <option value="jittery">Jittery</option>
               </select>
             </label>
           </div>
@@ -574,16 +605,16 @@ function NutritionPage({ meals, newMeal, setNewMeal, handleMealSubmit }) {
               <option value="focused">Focused</option>
               <option value="calm">Calm</option>
               <option value="tired">Tired</option>
-              <option value="giggly">Giggly</option>
+              <option value="meh">Meh</option>
             </select>
           </label>
 
           <label>
-            What did your body notice?
+            What did you notice?
             <input
               value={newMeal.bodyFeel}
               onChange={(event) => setNewMeal({ ...newMeal, bodyFeel: event.target.value })}
-              placeholder="felt full, had energy, tummy felt good"
+              placeholder="steady energy, no headache, stayed full"
             />
           </label>
 
@@ -592,17 +623,17 @@ function NutritionPage({ meals, newMeal, setNewMeal, handleMealSubmit }) {
             <textarea
               value={newMeal.note}
               onChange={(event) => setNewMeal({ ...newMeal, note: event.target.value })}
-              placeholder="This tasted yummy and helped me feel ready to create."
+              placeholder="Tasted amazing and powered my study session."
             />
           </label>
 
-          <button type="submit">Save meal</button>
+          <button type="submit">Log it</button>
         </form>
       </section>
 
       <section className="panel">
-        <p className="eyebrow">Nutrition cards</p>
-        <h2>What each food is helping with</h2>
+        <p className="eyebrow">Food intel</p>
+        <h2>What each food is doing for you</h2>
         <div className="meal-list">
           {meals.map((meal) => {
             const foodInfo = getFoodFact(meal.name);
@@ -614,10 +645,10 @@ function NutritionPage({ meals, newMeal, setNewMeal, handleMealSubmit }) {
                 </div>
                 <h3>{meal.name}</h3>
                 <p><strong>Food fact:</strong> {foodInfo.fact}</p>
-                <p><strong>Body note:</strong> {foodInfo.body}</p>
+                <p><strong>Why it helps:</strong> {foodInfo.body}</p>
                 <p><strong>Mood after:</strong> {meal.mood}</p>
                 <p><strong>Energy:</strong> {meal.energy}</p>
-                <p><strong>Body felt:</strong> {meal.bodyFeel}</p>
+                <p><strong>Noticed:</strong> {meal.bodyFeel}</p>
                 {meal.note && <p><strong>Notes:</strong> {meal.note}</p>}
               </article>
             );
@@ -628,29 +659,29 @@ function NutritionPage({ meals, newMeal, setNewMeal, handleMealSubmit }) {
   );
 }
 
-function ResearchLab() {
+function CuriosityLab() {
   return (
     <div className="content-grid single-column">
       <section className="panel">
-        <p className="eyebrow">Research lab</p>
-        <h2>Ask a question, gather clues, and learn like a brave explorer.</h2>
+        <p className="eyebrow">Curiosity lab</p>
+        <h2>Ask big questions. Track down real answers.</h2>
 
         <div className="research-grid">
           <div className="research-box">
             <h3>My question</h3>
-            <textarea placeholder="How do bats find their way in the dark?" />
+            <textarea placeholder="Why do octopuses change color?" />
           </div>
           <div className="research-box">
-            <h3>What I think</h3>
-            <textarea placeholder="I think they use sound because they are very good at listening." />
+            <h3>My hypothesis</h3>
+            <textarea placeholder="I think their skin reflects light somehow — maybe special cells?" />
           </div>
           <div className="research-box">
-            <h3>What I learned</h3>
-            <textarea placeholder="Bats use echolocation to send out sound waves and hear echoes." />
+            <h3>What I found</h3>
+            <textarea placeholder="Octopuses have chromatophores — tiny color-changing sacs in their skin." />
           </div>
           <div className="research-box">
-            <h3>What I wonder next</h3>
-            <textarea placeholder="How do different animals use sound to travel or hunt?" />
+            <h3>Next question</h3>
+            <textarea placeholder="Can cuttlefish and squid do this too? How fast can they switch?" />
           </div>
         </div>
       </section>
@@ -658,33 +689,33 @@ function ResearchLab() {
   );
 }
 
-function BookBuilder() {
+function StoryStudio() {
   return (
     <div className="content-grid single-column">
       <section className="panel">
-        <p className="eyebrow">Waldorf style yearbook</p>
-        <h2>Build your own story-rich textbook.</h2>
+        <p className="eyebrow">Story studio</p>
+        <h2>Build a story world that is completely yours.</h2>
 
         <div className="book-grid">
           <div className="chapter-card">
             <span>Chapter 1</span>
-            <h3>My Nature Journal</h3>
-            <textarea placeholder="Write about a tree, a bird, or a sky observation." />
+            <h3>Field Notes</h3>
+            <textarea placeholder="Observe like a scientist: a tree, the moon, a weird cloud pattern…" />
           </div>
           <div className="chapter-card">
             <span>Chapter 2</span>
-            <h3>My Character Sketch</h3>
-            <textarea placeholder="Describe your hero: what do they love, fear, and dream?" />
+            <h3>Character Sketch</h3>
+            <textarea placeholder="Who is your protagonist? What do they want, fear, and secretly love?" />
           </div>
           <div className="chapter-card">
             <span>Chapter 3</span>
-            <h3>My Worldbuilding Map</h3>
-            <textarea placeholder="Draw or describe your kingdom, forest, or magical city." />
+            <h3>Worldbuilding Map</h3>
+            <textarea placeholder="Sketch your setting: the city, the forest, the hidden door…" />
           </div>
           <div className="chapter-card">
             <span>Chapter 4</span>
-            <h3>My Story Spark</h3>
-            <textarea placeholder="What is the problem, the clue, and the final twist?" />
+            <h3>Story Spark</h3>
+            <textarea placeholder="Set up the problem, the twist, and the final showdown." />
           </div>
         </div>
       </section>
@@ -692,12 +723,12 @@ function BookBuilder() {
   );
 }
 
-function ChorePage({ chores, handleChoreToggle }) {
+function QuestPage({ chores, handleChoreToggle }) {
   return (
     <div className="content-grid single-column">
       <section className="panel">
-        <p className="eyebrow">Chore tracker</p>
-        <h2>Little tasks, big habits.</h2>
+        <p className="eyebrow">Quest log</p>
+        <h2>Level up, one quest at a time.</h2>
 
         <div className="chore-list">
           {chores.map((chore) => (
@@ -711,7 +742,7 @@ function ChorePage({ chores, handleChoreToggle }) {
                 <strong>{chore.title}</strong>
                 <span>{chore.category}</span>
               </div>
-              <span className="reward-badge">+{chore.reward} star</span>
+              <span className="reward-badge">+{chore.reward} XP</span>
             </label>
           ))}
         </div>
@@ -720,7 +751,7 @@ function ChorePage({ chores, handleChoreToggle }) {
   );
 }
 
-function AdminPage({
+function ParentZonePage({
   adminLoggedIn,
   adminLogin,
   setAdminLogin,
@@ -741,8 +772,8 @@ function AdminPage({
     return (
       <div className="content-grid single-column">
         <section className="panel">
-          <p className="eyebrow">Parent admin</p>
-          <h2>Login to edit chores and sticker rewards</h2>
+          <p className="eyebrow">Parent zone</p>
+          <h2>Parent access — manage quests, badges, and XP</h2>
           <form className="form-stack" onSubmit={handleAdminLogin}>
             <label>
               Username
@@ -758,10 +789,10 @@ function AdminPage({
                 type="password"
                 value={adminLogin.password}
                 onChange={(event) => setAdminLogin({ ...adminLogin, password: event.target.value })}
-                placeholder="foreststar"
+                placeholder="••••••••"
               />
             </label>
-            <button type="submit">Enter admin dashboard</button>
+            <button type="submit">Enter parent dashboard</button>
           </form>
         </section>
       </div>
@@ -772,7 +803,7 @@ function AdminPage({
     setChores((current) => current.filter((chore) => chore.id !== id));
   };
 
-  const addStickerToChart = (label) => {
+  const addBadgeToChart = (label) => {
     setStickers((current) =>
       current.map((item) =>
         item.label.toLowerCase() === label.toLowerCase()
@@ -787,20 +818,20 @@ function AdminPage({
       <section className="panel">
         <div className="admin-header">
           <div>
-            <p className="eyebrow">Parent admin</p>
-            <h2>Manage chores and stars</h2>
+            <p className="eyebrow">Parent zone</p>
+            <h2>Manage quests and XP</h2>
           </div>
           <button className="secondary" onClick={() => setAdminLoggedIn(false)}>Log out</button>
         </div>
 
         <form className="form-stack" onSubmit={handleAddChore}>
-          <h3>Add chore</h3>
+          <h3>Add quest</h3>
           <label>
-            Chore name
+            Quest name
             <input
               value={newChore.title}
               onChange={(event) => setNewChore({ ...newChore, title: event.target.value })}
-              placeholder="Fold towels"
+              placeholder="Fold laundry"
             />
           </label>
           <div className="inline-fields">
@@ -812,7 +843,7 @@ function AdminPage({
               />
             </label>
             <label>
-              Reward stars
+              Reward XP
               <input
                 type="number"
                 min="1"
@@ -821,7 +852,7 @@ function AdminPage({
               />
             </label>
           </div>
-          <button type="submit">Add chore</button>
+          <button type="submit">Add quest</button>
         </form>
 
         <div className="admin-list">
@@ -839,9 +870,9 @@ function AdminPage({
 
       <section className="panel">
         <form className="form-stack" onSubmit={handleAddSticker}>
-          <h3>Add sticker type</h3>
+          <h3>Add badge type</h3>
           <label>
-            Sticker label
+            Badge name
             <input
               value={newSticker.label}
               onChange={(event) => setNewSticker({ ...newSticker, label: event.target.value })}
@@ -849,7 +880,7 @@ function AdminPage({
           </label>
           <div className="inline-fields">
             <label>
-              Value
+              XP value
               <input
                 type="number"
                 min="1"
@@ -866,7 +897,7 @@ function AdminPage({
               />
             </label>
           </div>
-          <button type="submit">Add sticker to chart</button>
+          <button type="submit">Add badge</button>
         </form>
 
         <div className="sticker-chart-list">
@@ -877,7 +908,7 @@ function AdminPage({
                 <strong>{sticker.label}</strong>
                 <p>{sticker.count || 0} earned</p>
               </div>
-              <button className="secondary" onClick={() => addStickerToChart(sticker.label)}>+1</button>
+              <button className="secondary" onClick={() => addBadgeToChart(sticker.label)}>+1</button>
             </div>
           ))}
         </div>
