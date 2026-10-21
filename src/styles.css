@@ -1699,3 +1699,365 @@ button.danger:hover {
     grid-template-columns: 1fr;
   }
 }
+
+/* ---- Digital classrooms ---- */
+
+.classroom-create {
+  margin-top: 1rem;
+}
+
+.classroom-card {
+  --room-color: #b98cff;
+  border-left: 6px solid var(--room-color);
+}
+
+.classroom-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.classroom-title {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: none;
+  border: none;
+  box-shadow: none;
+  color: var(--ink);
+  text-align: left;
+  padding: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+.classroom-title small {
+  display: block;
+  color: rgba(60, 48, 84, 0.65);
+  font-weight: 500;
+}
+
+.classroom-emoji {
+  font-size: 1.8rem;
+}
+
+.classroom-caret {
+  margin-left: auto;
+  opacity: 0.6;
+}
+
+.classroom-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+button.secondary.danger {
+  background: rgba(255, 120, 140, 0.16);
+  color: #b3244a;
+}
+
+.classroom-edit {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 0.9rem;
+  padding: 0.9rem;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 16px;
+}
+
+.classroom-pickers {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.picker-row {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.picker-row.wrap {
+  flex-wrap: wrap;
+}
+
+.picker-dot {
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 50%;
+  border: 2px solid rgba(106, 88, 133, 0.18);
+  background: rgba(255, 255, 255, 0.7);
+  font-size: 1.05rem;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  padding: 0;
+  box-shadow: none;
+}
+
+.picker-dot.picked {
+  border-color: var(--ink);
+  transform: scale(1.12);
+  box-shadow: 0 4px 10px rgba(80, 62, 102, 0.25);
+}
+
+.classroom-body h4 {
+  margin: 1.1rem 0 0.5rem;
+}
+
+.link-list,
+.activity-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.link-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  padding: 0.45rem 0.7rem;
+}
+
+.link-list a {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.link-list a:hover {
+  text-decoration: underline;
+}
+
+.activity-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.activity-list li.done span,
+.activity-list li.done strong {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.activity-list label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+}
+
+.classroom-inline-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.classroom-inline-form input {
+  flex: 1;
+  min-width: 9rem;
+}
+
+.starter-rooms {
+  margin-top: 1.2rem;
+  padding-top: 1rem;
+  border-top: 1px dashed rgba(106, 88, 133, 0.25);
+}
+
+.starter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(255, 255, 255, 0.75);
+  border: 2px solid rgba(106, 88, 133, 0.15);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.starter-chip:hover {
+  transform: translateY(-2px);
+}
+
+/* ---- Calendar ---- */
+
+.calendar-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.week-nav {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.calendar-create {
+  margin-top: 1rem;
+}
+
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.day-card {
+  padding: 0.9rem;
+  min-height: 9rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.day-card.today {
+  outline: 2px solid rgba(94, 88, 196, 0.5);
+  background: linear-gradient(180deg, #f1ebff, #f8f5ff);
+}
+
+.day-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.day-head strong {
+  display: block;
+}
+
+.today-pill {
+  background: rgba(94, 88, 196, 0.16);
+  font-weight: 700;
+}
+
+.add-day {
+  width: 1.8rem;
+  height: 1.8rem;
+  padding: 0;
+  border-radius: 50%;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.calendar-item-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.calendar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: 14px;
+  padding: 0.55rem 0.75rem;
+}
+
+.calendar-row.done > .calendar-row-main > div > strong {
+  text-decoration: line-through;
+  opacity: 0.55;
+}
+
+.calendar-row-main {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.calendar-check {
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  border: 2px solid rgba(106, 88, 133, 0.3);
+  background: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  padding: 0;
+  font-weight: 700;
+  box-shadow: none;
+  flex-shrink: 0;
+}
+
+.calendar-row.done .calendar-check {
+  background: #7ddf8b;
+  border-color: #7ddf8b;
+}
+
+.calendar-meta {
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  font-size: 0.78rem;
+  color: rgba(60, 48, 84, 0.7);
+  font-weight: 600;
+}
+
+.goal-progress {
+  display: grid;
+  gap: 0.3rem;
+  margin-bottom: 0.8rem;
+}
+
+.goal-bar {
+  height: 0.7rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  overflow: hidden;
+}
+
+.goal-bar span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #ffd166, #ffb347);
+  transition: width 0.4s ease;
+}
+
+/* ---- Home day overview ---- */
+
+.next-up {
+  margin-top: 1rem;
+  padding: 0.8rem 1rem;
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: 16px;
+}
+
+.next-up h3 {
+  margin: 0.35rem 0 0;
+}
+
+.teal {
+  background: linear-gradient(180deg, #d9f4ef, #edfcf8);
+}
+
+@media (max-width: 1100px) {
+  .week-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .week-grid {
+    grid-template-columns: 1fr;
+  }
+}

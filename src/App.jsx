@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, NavLink, Route, Routes } from 'react-router-dom';
 import { useAppState } from './context/AppState.jsx';
 import { TimeClockPage } from './pages/TimeClockPage.jsx';
@@ -8,6 +8,8 @@ import { ShopPage } from './pages/ShopPage.jsx';
 import { FlipbookPage } from './pages/FlipbookPage.jsx';
 import { StoryStudioPage } from './pages/StoryStudioPage.jsx';
 import { CuriosityLabPage } from './pages/CuriosityLabPage.jsx';
+import { ClassroomPage } from './pages/ClassroomPage.jsx';
+import { CalendarPage } from './pages/CalendarPage.jsx';
 
 const DEFAULT_FOOD_FACTS = {
   oats: {
@@ -373,6 +375,8 @@ function App() {
           <div className="nav-menu">
             {[
               ['/', 'Home'],
+              ['/classrooms', 'Classrooms'],
+              ['/calendar', 'Calendar'],
               ['/time', 'Time Clock'],
               ['/projects', 'Projects'],
               ['/nutrition', 'Food & Mood'],
@@ -421,6 +425,8 @@ function App() {
           />
           <Route path="/research" element={<CuriosityLabPage />} />
           <Route path="/book" element={<StoryStudioPage />} />
+          <Route path="/classrooms" element={<ClassroomPage />} />
+          <Route path="/calendar" element={<CalendarPage />} />
           <Route path="/time" element={<TimeClockPage />} />
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/pet" element={<CreaturePage chores={chores} stickers={stickers} />} />
@@ -458,18 +464,60 @@ function App() {
   );
 }
 
+const KIND_META = {
+  event: { icon: '📌', label: 'Event' },
+  activity: { icon: '🏃', label: 'Activity' },
+  goal: { icon: '🎯', label: 'Goal' }
+};
+
+function dayKey(date) {
+  const month = `${date.getMonth() + 1}`.padStart(2, '0');
+  const day = `${date.getDate()}`.padStart(2, '0');
+  return `${date.getFullYear()}-${month}-${day}`;
+}
+
 function Dashboard({ meals, chores, stickers, completedChores, quizQuestionIndex, quizFeedback, handleQuizAnswer }) {
-  const { profile, starBalance } = useAppState();
+  const { profile, starBalance, classrooms, calendar, updateCalendarItem } = useAppState();
   const lastMeal = meals[0];
   const dailyFocus = chores.filter((chore) => !chore.done).slice(0, 3);
   const quizQuestion = QUIZ_QUESTIONS[quizQuestionIndex];
+  const today = dayKey(new Date());
+
+  const todayItems = useMemo(
+    () =>
+      calendar
+        .filter((item) => item.date === today)
+        .sort((a, b) => (a.time || '99:99').localeCompare(b.time || '99:99')),
+    [calendar, today]
+  );
+  const doneToday = todayItems.filter((item) => item.done === 'yes').length;
+  const nextUp = todayItems.find((item) => item.done !== 'yes');
+  const allGoals = calendar.filter((item) => item.kind === 'goal');
+  const goalsDone = allGoals.filter((item) => item.done === 'yes').length;
+
+  const toggleItem = async (item) => {
+    await updateCalendarItem(item.id, { done: item.done === 'yes' ? 'no' : 'yes' });
+  };
 
   return (
     <div className="dashboard-grid">
       <section className="panel hero-panel">
         <div>
-          <p className="eyebrow">Today’s game plan</p>
-          <h2>Own your day.</h2>
+          <p className="eyebrow">Your day ahead</p>
+          <h2>
+            {new Date().toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })}
+          </h2>
+          <p className="muted-note">
+            {todayItems.length
+              ? `${todayItems.length} thing${todayItems.length === 1 ? '' : 's'} planned today · ${doneToday} done`
+              : 'Nothing on the calendar yet — plan your day!'}
+          </p>
+          {nextUp && (
+            <div className="next-up">
+              <span className="pill">Next up{nextUp.time ? ` · ${nextUp.time}` : ''}</span>
+              <h3>{nextUp.title}</h3>
+            </div>
+          )}
         </div>
         <div className="hero-badges">
           <span>🌅 Morning routine</span>
@@ -478,18 +526,74 @@ function Dashboard({ meals, chores, stickers, completedChores, quizQuestionIndex
         </div>
       </section>
 
+      <section className="panel color-card teal">
+        <p className="eyebrow">Today’s schedule</p>
+        {todayItems.length ? (
+          <ul className="calendar-item-list compact">
+            {todayItems.map((item) => {
+              const meta = KIND_META[item.kind] || KIND_META.event;
+              const room = classrooms.find((classroom) => classroom.id === item.classroomId);
+              return (
+                <li key={item.id} className={`calendar-row compact ${item.done === 'yes' ? 'done' : ''}`}>
+                  <div className="calendar-row-main">
+                    <button
+                      className="calendar-check"
+                      onClick={() => toggleItem(item)}
+                      aria-label={item.done === 'yes' ? 'Mark as not done' : 'Mark as done'}
+                    >
+                      {item.done === 'yes' ? '✓' : ''}
+                    </button>
+                    <div>
+                      <strong>{item.title}</strong>
+                      <span className="calendar-meta">
+                        {item.time && <span>🕒 {item.time}</span>}
+                        <span>{meta.icon} {meta.label}</span>
+                        {room && <span>{room.emoji} {room.name}</span>}
+                      </span>
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <p>
+            A blank day — add events, activities, and goals in the{' '}
+            <Link to="/calendar">Calendar</Link>.
+          </p>
+        )}
+        <Link to="/calendar" className="ghost-link">Open the live calendar →</Link>
+      </section>
+
       <section className="panel color-card purple">
         <p className="eyebrow">Focus timer</p>
         <PomodoroTimer />
       </section>
 
       <section className="panel color-card blue">
-        <p className="eyebrow">Self care</p>
-        <ul className="mini-list">
-          <li>Refill your water bottle</li>
-          <li>10-minute stretch or dance break</li>
-          <li>Screen-free reset: journal, draw, or music</li>
-        </ul>
+        <p className="eyebrow">My classrooms</p>
+        {classrooms.length ? (
+          <div className="picker-row wrap">
+            {classrooms.map((room) => (
+              <Link
+                key={room.id}
+                to="/classrooms"
+                className="starter-chip"
+                style={{ borderColor: room.color }}
+              >
+                {room.emoji} {room.name}
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p>
+            Set up each subject like its own digital classroom in{' '}
+            <Link to="/classrooms">Classrooms</Link>.
+          </p>
+        )}
+        <small>
+          Goals: {goalsDone}/{allGoals.length} complete
+        </small>
       </section>
 
       <section className="panel color-card peach">

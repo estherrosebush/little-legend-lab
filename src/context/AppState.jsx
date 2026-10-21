@@ -3,6 +3,12 @@ import { api } from '../lib/api.js';
 
 const AppStateContext = createContext(null);
 
+function sortCalendar(a, b) {
+  const dateA = `${a.date || '9999'}T${a.time || '99:99'}`;
+  const dateB = `${b.date || '9999'}T${b.time || '99:99'}`;
+  return dateA.localeCompare(dateB);
+}
+
 export function AppStateProvider({ children }) {
   const [status, setStatus] = useState('loading');
   const [loadError, setLoadError] = useState('');
@@ -14,18 +20,22 @@ export function AppStateProvider({ children }) {
   const [snapshots, setSnapshots] = useState([]);
   const [stories, setStories] = useState([]);
   const [research, setResearch] = useState([]);
+  const [classrooms, setClassrooms] = useState([]);
+  const [calendar, setCalendar] = useState([]);
 
   const loadAll = useCallback(async () => {
     setStatus('loading');
     try {
-      const [hoursData, projectsData, profileData, backgroundsData, snapshotsData, storiesData, researchData] = await Promise.all([
+      const [hoursData, projectsData, profileData, backgroundsData, snapshotsData, storiesData, researchData, classroomsData, calendarData] = await Promise.all([
         api('/api/hours'),
         api('/api/projects'),
         api('/api/profile'),
         api('/api/backgrounds'),
         api('/api/snapshots'),
         api('/api/stories'),
-        api('/api/research')
+        api('/api/research'),
+        api('/api/classrooms'),
+        api('/api/calendar')
       ]);
       setHours({ entries: hoursData.entries || [], open: hoursData.open || null });
       setProjects(projectsData.projects || []);
@@ -35,6 +45,8 @@ export function AppStateProvider({ children }) {
       setSnapshots(snapshotsData.snapshots || []);
       setStories(storiesData.stories || []);
       setResearch(researchData.research || []);
+      setClassrooms(classroomsData.classrooms || []);
+      setCalendar(calendarData.items || []);
       setLoadError('');
       setStatus('ready');
     } catch (err) {
@@ -205,6 +217,83 @@ export function AppStateProvider({ children }) {
     setResearch((current) => current.filter((r) => r.id !== id));
   }, []);
 
+  const reloadClassrooms = useCallback(async () => {
+    const data = await api('/api/classrooms');
+    setClassrooms(data.classrooms || []);
+    return data.classrooms || [];
+  }, []);
+
+  const createClassroom = useCallback(async (data) => {
+    const row = await api('/api/classrooms', { body: data });
+    setClassrooms((current) => [...current, { ...row, links: [], activities: [] }]);
+    return row;
+  }, []);
+
+  const updateClassroom = useCallback(async (id, patch) => {
+    await api(`/api/classrooms/${id}`, { method: 'PUT', body: patch });
+    return reloadClassrooms();
+  }, [reloadClassrooms]);
+
+  const deleteClassroom = useCallback(async (id) => {
+    await api(`/api/classrooms/${id}`, { method: 'DELETE' });
+    setClassrooms((current) => current.filter((room) => room.id !== id));
+    setCalendar((current) =>
+      current.map((item) => (item.classroomId === id ? { ...item, classroomId: null } : item))
+    );
+  }, []);
+
+  const addClassroomLink = useCallback(async (classroomId, data) => {
+    await api(`/api/classrooms/${classroomId}/links`, { body: data });
+    return reloadClassrooms();
+  }, [reloadClassrooms]);
+
+  const deleteClassroomLink = useCallback(async (classroomId, linkId) => {
+    await api(`/api/classrooms/${classroomId}/links/${linkId}`, { method: 'DELETE' });
+    return reloadClassrooms();
+  }, [reloadClassrooms]);
+
+  const addClassroomActivity = useCallback(async (classroomId, data) => {
+    await api(`/api/classrooms/${classroomId}/activities`, { body: data });
+    return reloadClassrooms();
+  }, [reloadClassrooms]);
+
+  const toggleClassroomActivity = useCallback(async (classroomId, activityId, status) => {
+    await api(`/api/classrooms/${classroomId}/activities/${activityId}`, {
+      method: 'PUT',
+      body: { status }
+    });
+    return reloadClassrooms();
+  }, [reloadClassrooms]);
+
+  const deleteClassroomActivity = useCallback(async (classroomId, activityId) => {
+    await api(`/api/classrooms/${classroomId}/activities/${activityId}`, { method: 'DELETE' });
+    return reloadClassrooms();
+  }, [reloadClassrooms]);
+
+  const createCalendarItem = useCallback(async (data) => {
+    const row = await api('/api/calendar', { body: data });
+    setCalendar((current) => [...current, row].sort(sortCalendar));
+    return row;
+  }, []);
+
+  const updateCalendarItem = useCallback(async (id, patch) => {
+    const row = await api(`/api/calendar/${id}`, { method: 'PUT', body: patch });
+    setCalendar((current) =>
+      current.map((item) => (item.id === id ? row : item)).sort(sortCalendar)
+    );
+    return row;
+  }, []);
+
+  const deleteCalendarItem = useCallback(async (id) => {
+    await api(`/api/calendar/${id}`, { method: 'DELETE' });
+    setCalendar((current) => current.filter((item) => item.id !== id));
+  }, []);
+
+  const refreshCalendar = useCallback(async () => {
+    const data = await api('/api/calendar');
+    setCalendar(data.items || []);
+  }, []);
+
   const value = useMemo(() => {
     const starBalance = profile ? Math.max(0, profile.starBank - profile.starsSpent) : 0;
     return {
@@ -219,6 +308,8 @@ export function AppStateProvider({ children }) {
       snapshots,
       stories,
       research,
+      classrooms,
+      calendar,
       loadAll,
       clockIn,
       clockOut,
@@ -235,7 +326,19 @@ export function AppStateProvider({ children }) {
       deleteBackground,
       captureSnapshot,
       updateSnapshot,
-      deleteSnapshot
+      deleteSnapshot,
+      createClassroom,
+      updateClassroom,
+      deleteClassroom,
+      addClassroomLink,
+      deleteClassroomLink,
+      addClassroomActivity,
+      toggleClassroomActivity,
+      deleteClassroomActivity,
+      createCalendarItem,
+      updateCalendarItem,
+      deleteCalendarItem,
+      refreshCalendar
     };
   }, [
     status,
@@ -248,6 +351,8 @@ export function AppStateProvider({ children }) {
     snapshots,
     stories,
     research,
+    classrooms,
+    calendar,
     loadAll,
     clockIn,
     clockOut,
@@ -270,7 +375,19 @@ export function AppStateProvider({ children }) {
     deleteStory,
     createResearch,
     updateResearch,
-    deleteResearch
+    deleteResearch,
+    createClassroom,
+    updateClassroom,
+    deleteClassroom,
+    addClassroomLink,
+    deleteClassroomLink,
+    addClassroomActivity,
+    toggleClassroomActivity,
+    deleteClassroomActivity,
+    createCalendarItem,
+    updateCalendarItem,
+    deleteCalendarItem,
+    refreshCalendar
   ]);
 
   return <AppStateContext.Provider value={value}>{children}</AppStateContext.Provider>;
