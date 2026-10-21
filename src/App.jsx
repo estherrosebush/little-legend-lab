@@ -1,5 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
-import { NavLink, Route, Routes } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, NavLink, Route, Routes } from 'react-router-dom';
+import { useAppState } from './context/AppState.jsx';
+import { TimeClockPage } from './pages/TimeClockPage.jsx';
+import { ProjectsPage } from './pages/ProjectsPage.jsx';
+import { CreaturePage } from './pages/CreaturePage.jsx';
+import { ShopPage } from './pages/ShopPage.jsx';
+import { FlipbookPage } from './pages/FlipbookPage.jsx';
 
 const DEFAULT_FOOD_FACTS = {
   oats: {
@@ -146,8 +152,8 @@ const QUIZ_QUESTIONS = [
   }
 ];
 
-const ADMIN_USERNAME = 'parent';
-const ADMIN_PASSWORD = 'foreststar';
+const ADMIN_USERNAME = 'Estherrosebush';
+const ADMIN_PASSWORD = 'gonnabemyday';
 
 function loadStored(key, fallback) {
   try {
@@ -189,6 +195,7 @@ function formatTime(value) {
 }
 
 function App() {
+  const { grantStars } = useAppState();
   const [meals, setMeals] = useState(() => loadStored('legendLabMeals', DEFAULT_MEALS));
   const [chores, setChores] = useState(() => loadStored('legendLabChores', DEFAULT_CHORES));
   const [stickers, setStickers] = useState(() => loadStored('legendLabStickers', DEFAULT_STICKERS));
@@ -223,11 +230,6 @@ function App() {
     window.localStorage.setItem('legendLabAdminLoggedIn', JSON.stringify(adminLoggedIn));
   }, [adminLoggedIn]);
 
-  const totalStickerCount = useMemo(
-    () => stickers.reduce((sum, sticker) => sum + Number(sticker.count || 0), 0),
-    [stickers]
-  );
-
   const completedChores = chores.filter((chore) => chore.done).length;
 
   const handleMealSubmit = (event) => {
@@ -252,12 +254,17 @@ function App() {
     setNewMeal({ name: '', type: 'breakfast', note: '', energy: 'steady', mood: 'happy', bodyFeel: '' });
   };
 
-  const handleChoreToggle = (id) => {
-    setChores((current) =>
-      current.map((chore) =>
-        chore.id === id ? { ...chore, done: !chore.done } : chore
-      )
-    );
+  const handleQuizAnswer = (optionIndex) => {
+    if (quizFeedback) return;
+
+    const question = QUIZ_QUESTIONS[quizQuestionIndex];
+    const isCorrect = optionIndex === question.correct;
+    setQuizFeedback(isCorrect ? `Correct! ${question.why}` : `Not quite — ${question.why}`);
+
+    window.setTimeout(() => {
+      setQuizFeedback('');
+      setQuizQuestionIndex((current) => (current + 1) % QUIZ_QUESTIONS.length);
+    }, 2800);
   };
 
   const handleAddChore = (event) => {
@@ -308,7 +315,7 @@ function App() {
   const handleAdminLogin = (event) => {
     event.preventDefault();
     if (
-      adminLogin.username === ADMIN_USERNAME &&
+      adminLogin.username.trim().toLowerCase() === ADMIN_USERNAME.toLowerCase() &&
       adminLogin.password === ADMIN_PASSWORD
     ) {
       setAdminLoggedIn(true);
@@ -319,17 +326,23 @@ function App() {
     alert('That login did not match. Ask a parent to try again.');
   };
 
-  const handleQuizAnswer = (optionIndex) => {
-    if (quizFeedback) return;
+  const handleChoreToggle = async (id) => {
+    const chore = chores.find((item) => item.id === id);
+    const willBeDone = Boolean(chore && !chore.done);
+    setChores((current) =>
+      current.map((item) => (item.id === id ? { ...item, done: !item.done } : item))
+    );
 
-    const question = QUIZ_QUESTIONS[quizQuestionIndex];
-    const isCorrect = optionIndex === question.correct;
-    setQuizFeedback(isCorrect ? `Correct! ${question.why}` : `Not quite — ${question.why}`);
-
-    window.setTimeout(() => {
-      setQuizFeedback('');
-      setQuizQuestionIndex((current) => (current + 1) % QUIZ_QUESTIONS.length);
-    }, 2800);
+    if (willBeDone && chore.reward > 0 && !chore.rewarded) {
+      try {
+        await grantStars(chore.reward);
+        setChores((current) =>
+          current.map((item) => (item.id === id ? { ...item, rewarded: true } : item))
+        );
+      } catch {
+        // Stars stay ungranted so the reward can be retried later.
+      }
+    }
   };
 
   return (
@@ -344,11 +357,16 @@ function App() {
         </div>
 
         <nav className="nav-links" aria-label="Main navigation">
-          <NavLink to="/">Home</NavLink>
+          <NavLink to="/" end>Home</NavLink>
+          <NavLink to="/time">Time Clock</NavLink>
+          <NavLink to="/projects">Projects</NavLink>
           <NavLink to="/nutrition">Food &amp; Mood</NavLink>
+          <NavLink to="/chores">Quests</NavLink>
+          <NavLink to="/pet">My Creature</NavLink>
+          <NavLink to="/shop">Star Shop</NavLink>
           <NavLink to="/research">Curiosity Lab</NavLink>
           <NavLink to="/book">Story Studio</NavLink>
-          <NavLink to="/chores">Quests</NavLink>
+          <NavLink to="/yearbook">Yearbook</NavLink>
           <NavLink to="/admin">Parent Zone</NavLink>
         </nav>
       </header>
@@ -362,7 +380,6 @@ function App() {
                 meals={meals}
                 chores={chores}
                 stickers={stickers}
-                totalStickerCount={totalStickerCount}
                 completedChores={completedChores}
                 quizQuestionIndex={quizQuestionIndex}
                 quizFeedback={quizFeedback}
@@ -383,6 +400,11 @@ function App() {
           />
           <Route path="/research" element={<CuriosityLab />} />
           <Route path="/book" element={<StoryStudio />} />
+          <Route path="/time" element={<TimeClockPage />} />
+          <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/pet" element={<CreaturePage chores={chores} stickers={stickers} />} />
+          <Route path="/shop" element={<ShopPage />} />
+          <Route path="/yearbook" element={<FlipbookPage chores={chores} stickers={stickers} />} />
           <Route
             path="/chores"
             element={<QuestPage chores={chores} handleChoreToggle={handleChoreToggle} />}
@@ -415,7 +437,8 @@ function App() {
   );
 }
 
-function Dashboard({ meals, chores, stickers, totalStickerCount, completedChores, quizQuestionIndex, quizFeedback, handleQuizAnswer }) {
+function Dashboard({ meals, chores, stickers, completedChores, quizQuestionIndex, quizFeedback, handleQuizAnswer }) {
+  const { profile, starBalance } = useAppState();
   const lastMeal = meals[0];
   const dailyFocus = chores.filter((chore) => !chore.done).slice(0, 3);
   const quizQuestion = QUIZ_QUESTIONS[quizQuestionIndex];
@@ -461,9 +484,9 @@ function Dashboard({ meals, chores, stickers, totalStickerCount, completedChores
       </section>
 
       <section className="panel color-card green">
-        <p className="eyebrow">XP tracker</p>
-        <div className="big-stat">{totalStickerCount}</div>
-        <p>XP earned so far</p>
+        <p className="eyebrow">Star wallet</p>
+        <div className="big-stat">⭐ {profile ? starBalance : '—'}</div>
+        <p>stars ready to spend in the shop</p>
         <div className="sticker-row">
           {stickers.map((sticker) => (
             <span key={sticker.id} className="sticker-dot" style={{ background: sticker.color }} title={sticker.label}>
@@ -471,6 +494,7 @@ function Dashboard({ meals, chores, stickers, totalStickerCount, completedChores
             </span>
           ))}
         </div>
+        <Link to="/shop" className="ghost-link">Visit the Star Shop →</Link>
       </section>
 
       <section className="panel color-card yellow">
@@ -742,7 +766,7 @@ function QuestPage({ chores, handleChoreToggle }) {
                 <strong>{chore.title}</strong>
                 <span>{chore.category}</span>
               </div>
-              <span className="reward-badge">+{chore.reward} XP</span>
+              <span className="reward-badge">+{chore.reward} ⭐</span>
             </label>
           ))}
         </div>
@@ -768,19 +792,39 @@ function ParentZonePage({
   setNewSticker,
   handleAddSticker
 }) {
+  const { grantStars, profile } = useAppState();
+  const [starsAmount, setStarsAmount] = useState('5');
+  const [starsFeedback, setStarsFeedback] = useState('');
+
+  const handleGiveStars = async (event) => {
+    event.preventDefault();
+    setStarsFeedback('');
+    const amount = Math.round(Number(starsAmount));
+    if (!Number.isFinite(amount) || amount === 0) {
+      setStarsFeedback('Enter a non-zero amount.');
+      return;
+    }
+    try {
+      const data = await grantStars(amount);
+      setStarsFeedback(`Done — bank is now ${data.profile.starBank} stars earned.`);
+    } catch (err) {
+      setStarsFeedback(err.message);
+    }
+  };
+
   if (!adminLoggedIn) {
     return (
       <div className="content-grid single-column">
         <section className="panel">
           <p className="eyebrow">Parent zone</p>
-          <h2>Parent access — manage quests, badges, and XP</h2>
+          <h2>Parent access — manage quests, badges, and stars</h2>
           <form className="form-stack" onSubmit={handleAdminLogin}>
             <label>
               Username
               <input
                 value={adminLogin.username}
                 onChange={(event) => setAdminLogin({ ...adminLogin, username: event.target.value })}
-                placeholder="parent"
+                placeholder="your username"
               />
             </label>
             <label>
@@ -843,7 +887,7 @@ function ParentZonePage({
               />
             </label>
             <label>
-              Reward XP
+              Reward stars
               <input
                 type="number"
                 min="1"
@@ -880,7 +924,7 @@ function ParentZonePage({
           </label>
           <div className="inline-fields">
             <label>
-              XP value
+              Star value
               <input
                 type="number"
                 min="1"
@@ -912,6 +956,32 @@ function ParentZonePage({
             </div>
           ))}
         </div>
+      </section>
+
+      <section className="panel">
+        <form className="form-stack" onSubmit={handleGiveStars}>
+          <h3>Give stars</h3>
+          <p className="muted-note">
+            Quests automatically pay their star reward the first time they are finished. You can also add
+            stars here — use a negative number to take stars back.
+          </p>
+          <div className="inline-fields">
+            <label>
+              Amount
+              <input
+                type="number"
+                value={starsAmount}
+                onChange={(event) => setStarsAmount(event.target.value)}
+              />
+            </label>
+            <label>
+              Stars earned so far
+              <input value={profile ? `${profile.starBank}` : '—'} readOnly />
+            </label>
+          </div>
+          <button type="submit">Update star bank</button>
+          {starsFeedback && <p className="feedback-note">{starsFeedback}</p>}
+        </form>
       </section>
     </div>
   );
