@@ -46,6 +46,28 @@ export const inventory = pgTable("inventory", {
   acquiredAt: timestamp("acquired_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
+export const stories = pgTable("stories", {
+  id: serial().primaryKey(),
+  title: text().default("Untitled story").notNull(),
+  content: text().default("").notNull(),
+  kind: text().default("story").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export const researchProjects = pgTable("research_projects", {
+  id: serial().primaryKey(),
+  topic: text().default("").notNull(),
+  question: text().default("").notNull(),
+  hypothesis: text().default("").notNull(),
+  findings: text().default("").notNull(),
+  nextSteps: text("next_steps").default("").notNull(),
+  sources: jsonb("sources").$type<Array<{ title: string; url: string; note: string }>>().default([]).notNull(),
+  notes: text().default("").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
 export const snapshots = pgTable("snapshots", {
   id: serial().primaryKey(),
   label: text().default(""),

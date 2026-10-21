@@ -12,16 +12,20 @@ export function AppStateProvider({ children }) {
   const [hours, setHours] = useState({ entries: [], open: null });
   const [projects, setProjects] = useState([]);
   const [snapshots, setSnapshots] = useState([]);
+  const [stories, setStories] = useState([]);
+  const [research, setResearch] = useState([]);
 
   const loadAll = useCallback(async () => {
     setStatus('loading');
     try {
-      const [hoursData, projectsData, profileData, backgroundsData, snapshotsData] = await Promise.all([
+      const [hoursData, projectsData, profileData, backgroundsData, snapshotsData, storiesData, researchData] = await Promise.all([
         api('/api/hours'),
         api('/api/projects'),
         api('/api/profile'),
         api('/api/backgrounds'),
-        api('/api/snapshots')
+        api('/api/snapshots'),
+        api('/api/stories'),
+        api('/api/research')
       ]);
       setHours({ entries: hoursData.entries || [], open: hoursData.open || null });
       setProjects(projectsData.projects || []);
@@ -29,6 +33,8 @@ export function AppStateProvider({ children }) {
       setOwned(profileData.owned || []);
       setBackgrounds(backgroundsData.backgrounds || []);
       setSnapshots(snapshotsData.snapshots || []);
+      setStories(storiesData.stories || []);
+      setResearch(researchData.research || []);
       setLoadError('');
       setStatus('ready');
     } catch (err) {
@@ -165,6 +171,40 @@ export function AppStateProvider({ children }) {
     setSnapshots((current) => current.filter((s) => s.id !== id));
   }, []);
 
+  const createStory = useCallback(async (data) => {
+    const row = await api('/api/stories', { body: data });
+    setStories((current) => [row, ...current]);
+    return row;
+  }, []);
+
+  const updateStory = useCallback(async (id, patch) => {
+    const row = await api(`/api/stories/${id}`, { method: 'PUT', body: patch });
+    setStories((current) => current.map((s) => (s.id === id ? row : s)));
+    return row;
+  }, []);
+
+  const deleteStory = useCallback(async (id) => {
+    await api(`/api/stories/${id}`, { method: 'DELETE' });
+    setStories((current) => current.filter((s) => s.id !== id));
+  }, []);
+
+  const createResearch = useCallback(async (data) => {
+    const row = await api('/api/research', { body: data });
+    setResearch((current) => [row, ...current]);
+    return row;
+  }, []);
+
+  const updateResearch = useCallback(async (id, patch) => {
+    const row = await api(`/api/research/${id}`, { method: 'PUT', body: patch });
+    setResearch((current) => current.map((r) => (r.id === id ? row : r)));
+    return row;
+  }, []);
+
+  const deleteResearch = useCallback(async (id) => {
+    await api(`/api/research/${id}`, { method: 'DELETE' });
+    setResearch((current) => current.filter((r) => r.id !== id));
+  }, []);
+
   const value = useMemo(() => {
     const starBalance = profile ? Math.max(0, profile.starBank - profile.starsSpent) : 0;
     return {
@@ -177,6 +217,8 @@ export function AppStateProvider({ children }) {
       hours,
       projects,
       snapshots,
+      stories,
+      research,
       loadAll,
       clockIn,
       clockOut,
@@ -204,6 +246,8 @@ export function AppStateProvider({ children }) {
     hours,
     projects,
     snapshots,
+    stories,
+    research,
     loadAll,
     clockIn,
     clockOut,
@@ -220,7 +264,13 @@ export function AppStateProvider({ children }) {
     deleteBackground,
     captureSnapshot,
     updateSnapshot,
-    deleteSnapshot
+    deleteSnapshot,
+    createStory,
+    updateStory,
+    deleteStory,
+    createResearch,
+    updateResearch,
+    deleteResearch
   ]);
 
   return <AppStateContext.Provider value={value}>{children}</AppStateContext.Provider>;

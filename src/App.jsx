@@ -6,6 +6,8 @@ import { ProjectsPage } from './pages/ProjectsPage.jsx';
 import { CreaturePage } from './pages/CreaturePage.jsx';
 import { ShopPage } from './pages/ShopPage.jsx';
 import { FlipbookPage } from './pages/FlipbookPage.jsx';
+import { StoryStudioPage } from './pages/StoryStudioPage.jsx';
+import { CuriosityLabPage } from './pages/CuriosityLabPage.jsx';
 
 const DEFAULT_FOOD_FACTS = {
   oats: {
@@ -213,6 +215,7 @@ function App() {
   const [newSticker, setNewSticker] = useState({ label: 'Creator Badge', value: 1, color: '#ffd166' });
   const [quizQuestionIndex, setQuizQuestionIndex] = useState(0);
   const [quizFeedback, setQuizFeedback] = useState('');
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     window.localStorage.setItem('legendLabMeals', JSON.stringify(meals));
@@ -356,18 +359,36 @@ function App() {
           </div>
         </div>
 
-        <nav className="nav-links" aria-label="Main navigation">
-          <NavLink to="/" end>Home</NavLink>
-          <NavLink to="/time">Time Clock</NavLink>
-          <NavLink to="/projects">Projects</NavLink>
-          <NavLink to="/nutrition">Food &amp; Mood</NavLink>
-          <NavLink to="/chores">Quests</NavLink>
-          <NavLink to="/pet">My Creature</NavLink>
-          <NavLink to="/shop">Star Shop</NavLink>
-          <NavLink to="/research">Curiosity Lab</NavLink>
-          <NavLink to="/book">Story Studio</NavLink>
-          <NavLink to="/yearbook">Yearbook</NavLink>
-          <NavLink to="/admin">Parent Zone</NavLink>
+        <nav className={`nav-dropdown ${menuOpen ? 'open' : ''}`} aria-label="Main navigation">
+          <button
+            className="nav-toggle"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((current) => !current)}
+          >
+            <span className="nav-burger" aria-hidden="true">
+              <span /><span /><span />
+            </span>
+            Menu
+          </button>
+          <div className="nav-menu">
+            {[
+              ['/', 'Home'],
+              ['/time', 'Time Clock'],
+              ['/projects', 'Projects'],
+              ['/nutrition', 'Food & Mood'],
+              ['/chores', 'Quests'],
+              ['/pet', 'My Creature'],
+              ['/shop', 'Star Shop'],
+              ['/research', 'Curiosity Lab'],
+              ['/book', 'Story Studio'],
+              ['/yearbook', 'Yearbook'],
+              ['/admin', 'Parent Zone']
+            ].map(([to, label]) => (
+              <NavLink key={to} to={to} end={to === '/'} onClick={() => setMenuOpen(false)}>
+                {label}
+              </NavLink>
+            ))}
+          </div>
         </nav>
       </header>
 
@@ -398,8 +419,8 @@ function App() {
               />
             }
           />
-          <Route path="/research" element={<CuriosityLab />} />
-          <Route path="/book" element={<StoryStudio />} />
+          <Route path="/research" element={<CuriosityLabPage />} />
+          <Route path="/book" element={<StoryStudioPage />} />
           <Route path="/time" element={<TimeClockPage />} />
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/pet" element={<CreaturePage chores={chores} stickers={stickers} />} />
@@ -677,70 +698,6 @@ function NutritionPage({ meals, newMeal, setNewMeal, handleMealSubmit }) {
               </article>
             );
           })}
-        </div>
-      </section>
-    </div>
-  );
-}
-
-function CuriosityLab() {
-  return (
-    <div className="content-grid single-column">
-      <section className="panel">
-        <p className="eyebrow">Curiosity lab</p>
-        <h2>Ask big questions. Track down real answers.</h2>
-
-        <div className="research-grid">
-          <div className="research-box">
-            <h3>My question</h3>
-            <textarea placeholder="Why do octopuses change color?" />
-          </div>
-          <div className="research-box">
-            <h3>My hypothesis</h3>
-            <textarea placeholder="I think their skin reflects light somehow — maybe special cells?" />
-          </div>
-          <div className="research-box">
-            <h3>What I found</h3>
-            <textarea placeholder="Octopuses have chromatophores — tiny color-changing sacs in their skin." />
-          </div>
-          <div className="research-box">
-            <h3>Next question</h3>
-            <textarea placeholder="Can cuttlefish and squid do this too? How fast can they switch?" />
-          </div>
-        </div>
-      </section>
-    </div>
-  );
-}
-
-function StoryStudio() {
-  return (
-    <div className="content-grid single-column">
-      <section className="panel">
-        <p className="eyebrow">Story studio</p>
-        <h2>Build a story world that is completely yours.</h2>
-
-        <div className="book-grid">
-          <div className="chapter-card">
-            <span>Chapter 1</span>
-            <h3>Field Notes</h3>
-            <textarea placeholder="Observe like a scientist: a tree, the moon, a weird cloud pattern…" />
-          </div>
-          <div className="chapter-card">
-            <span>Chapter 2</span>
-            <h3>Character Sketch</h3>
-            <textarea placeholder="Who is your protagonist? What do they want, fear, and secretly love?" />
-          </div>
-          <div className="chapter-card">
-            <span>Chapter 3</span>
-            <h3>Worldbuilding Map</h3>
-            <textarea placeholder="Sketch your setting: the city, the forest, the hidden door…" />
-          </div>
-          <div className="chapter-card">
-            <span>Chapter 4</span>
-            <h3>Story Spark</h3>
-            <textarea placeholder="Set up the problem, the twist, and the final showdown." />
-          </div>
         </div>
       </section>
     </div>
